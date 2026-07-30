@@ -6,7 +6,7 @@ import (
 	"github.com/redhat-best-practices-for-k8s/oct/pkg/certdb/offlinecheck"
 	"github.com/redhat-best-practices-for-k8s/oct/pkg/certdb/onlinecheck"
 	"github.com/sirupsen/logrus"
-	"helm.sh/helm/v3/pkg/release"
+	release "helm.sh/helm/v4/pkg/release/v1"
 )
 
 type CertificationStatusValidator interface {
