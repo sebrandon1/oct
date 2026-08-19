@@ -15,7 +15,7 @@ The primary use case is supporting Red Hat's certification tools like the certsu
 - Downloads and caches certified container images catalog from Red Hat
 - Downloads and caches certified operators catalog (certified-operators and redhat-operators organizations)
 - Downloads and caches certified Helm charts from OpenShift Charts repository
-- Container image is rebuilt automatically every 6 hours via GitHub Actions
+- Container image is rebuilt automatically once daily (1:17am UTC) via GitHub Actions
 - Supports multi-architecture builds (amd64, arm64, ppc64le, s390x)
 
 ### Container Image
@@ -165,7 +165,7 @@ data/
 
 - `github.com/spf13/cobra` - CLI framework
 - `github.com/sirupsen/logrus` - Logging
-- `helm.sh/helm/v3` - Helm chart handling
+- `helm.sh/helm/v4` - Helm chart handling
 - `github.com/Masterminds/semver/v3` - Semantic version parsing
 - `gopkg.in/yaml.v3` - YAML parsing
 
@@ -173,7 +173,7 @@ data/
 
 ### Go Version
 
-This repository uses Go 1.26.
+This repository uses Go 1.26.0 with toolchain go1.26.5.
 
 ### Testing Framework
 
@@ -195,15 +195,17 @@ All code must pass golangci-lint with the configuration in `.golangci.yml`. Key 
 ### API Endpoints
 
 The tool interacts with these Red Hat APIs:
-- **Pyxis Container API**: `https://catalog.redhat.com/api/containers/v1/`
+- **Pyxis Container API** (base path: `https://catalog.redhat.com/api/containers/v1/`)
+  - Images endpoint: `https://catalog.redhat.com/api/containers/v1/images`
+  - Operators endpoint: `https://catalog.redhat.com/api/containers/v1/operators/bundles`
+  - Health check: `https://catalog.redhat.com/api/containers/v1/ping`
 - **OpenShift Charts**: `https://charts.openshift.io/index.yaml`
-- **Health Check**: `https://catalog.redhat.com/api/containers/v1/ping`
 
 ### Important Notes
 
 1. **Only partner certified images** are stored in the offline database. Red Hat images checked against the offline database will appear as not certified (the online database includes both).
 
-2. The container image is automatically rebuilt every 6 hours via the `recreate-image.yml` GitHub Actions workflow.
+2. The container image is automatically rebuilt once daily at 1:17am UTC via the `recreate-image.yml` GitHub Actions workflow.
 
 3. The fetch tool downloads catalog pages concurrently using goroutines for improved performance.
 
