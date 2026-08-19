@@ -52,7 +52,6 @@ lint:
 	golangci-lint run --timeout 5m0s
 
 coverage-html: test
-	cat cover.out.tmp | grep -v "_moq.go" > cover.out
 	go tool cover -html cover.out
 
 update-certified-catalog:

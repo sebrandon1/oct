@@ -3,7 +3,7 @@ OCT is a containerized application that retrieves the latest certified artifacts
 
 # Why Use OCT
 
-- **Fresh certification data** — The OCT container is updated 4x daily, while certsuite releases may be months apart with increasingly stale embedded catalogs
+- **Fresh certification data** — The OCT container is updated daily at 1:17am UTC, while certsuite releases may be months apart with increasingly stale embedded catalogs
 - **Disconnected environment support** — Enables certification testing in air-gapped or offline environments where Red Hat's online catalog is unreachable
 - **Avoid false test failures** — Prevents `affiliated-certification` test failures caused by newly certified artifacts missing from outdated embedded catalogs
 - **Simple workflow** — Just pull the container, run it in dump-only mode, and point certsuite to the extracted database files
@@ -21,7 +21,7 @@ Note: Only partner certified images are stored in the offline database. If Redha
 
 If a partner is using the latest official TNF release, let's say v4.1, it will come with an embedded offline catalog that was downloaded and embedded at the same moment the v4.1 version was released. For each day that passes, that offline catalog will be more and more outdated, but the partners will be using that v4.1 until v4.2 comes out, which could take months. If they upgrade their CNFs with new operators/containers that have been added recently to the online catalog, the TNF certification test cases will fail.
 
-The OCT container image will help here, as it's updated four times a day. The workflow for partners that want to run TNF in fully disconnected environments would be the following:
+The OCT container image will help here, as it's updated daily at 1:17am UTC. The workflow for partners that want to run TNF in fully disconnected environments would be the following:
 1. In a separate server, with internet access, download the latest OCT image container.
 2. Copy that image into the bastion host, or the machine where TNF will run.
 3. Run the OCT container in dump-only mode, which will create a folder with the internal catalog files.
@@ -42,7 +42,7 @@ TNF's fetch CLI tool code was copied here, so the syntax is the same, but it's h
       ```
     - Run the container, using adding the `--env OCT_DUMP_ONLY=true` params to the docker run command. The path to the local folder must be passed with the `-v`flag. Also, the user id and groups need to be used so the files are created with that user.
       ```
-      $ docker run -v /full/path/to/db:/tmp/dump:Z --user $(id -u):$(id -g) --env OCT_DUMP_ONLY=true quay.io/greyerof/oct:latest
+      $ docker run -v /full/path/to/db:/tmp/dump:Z --user $(id -u):$(id -g) --env OCT_DUMP_ONLY=true quay.io/redhat-best-practices-for-k8s/oct:latest
       OCT: Dumping current DB to /tmp/dump
       $ tree db
       db
@@ -72,7 +72,7 @@ TNF's fetch CLI tool code was copied here, so the syntax is the same, but it's h
       ```
     - Run the container without any env var.
       ```
-      $ docker run -v /full/path/to/db:/tmp/dump:Z --user $(id -u):$(id -g) quay.io/greyerof/oct:latest
+      $ docker run -v /full/path/to/db:/tmp/dump:Z --user $(id -u):$(id -g) quay.io/redhat-best-practices-for-k8s/oct:latest
       time="2022-07-15T10:11:57Z" level=info msg="{23196 3960 0}"
       time="2022-07-15T10:11:58Z" level=info msg="we should fetch new data3961 3960"
       ...
